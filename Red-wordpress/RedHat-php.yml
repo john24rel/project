@@ -1,0 +1,50 @@
+  - name: yum remi.repo
+    yum: 
+      name:  http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+      state: latest
+  - name: enable remi.repo
+    shell: " yum-config-manager --enable remi-php72 "
+
+  - name: Install php
+    yum:
+      name: php
+      state: latest
+
+  - name: php mysql
+    yum:
+      name: php-mysql
+      state: latest
+
+  - name: Install client
+    yum:
+      name: mariadb
+      state: latest
+
+  - name: Install client
+    yum:
+      name: python3
+      state: latest
+
+  - name: Install client
+    yum:
+      name: MySQL-python
+      state: latest
+
+
+  - name: Install Mysql
+    yum:
+      name: mariadb-server
+      state: latest
+
+  - name: Start mariadb
+    systemd:
+      name: mariadb
+      state: started
+
+  - name: Enable mariadb
+    become: yes
+    shell: "systemctl enable mariadb"
+      
+  - name: Restart  mariadb
+    become: yes
+    shell: "systemctl restart mariadb"

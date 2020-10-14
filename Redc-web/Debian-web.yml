@@ -1,0 +1,47 @@
+  - name: Install Apache
+    package:
+      name: apache2
+      state: latest
+
+  - name: Change Hostname
+    hostname:
+      name: web
+
+  - name: Start apache2
+    systemd:
+      name: apache2
+      state: started
+
+  - name: Enable apache2
+    systemd:
+      name: apache2
+      enabled: yes
+      masked: no 
+
+  - name: Download Templates
+    get_url:
+      url: https://www.free-css.com/assets/files/free-css-templates/download/page253/estateagency.zip
+      dest: "/var/www/html/"
+
+  - name: Install unzip
+    yum:
+      name: unzip
+      state: latest 
+
+  - name: unzip
+    unarchive:
+      src: https://www.free-css.com/assets/files/free-css-templates/download/page253/estateagency.zip
+      dest: "/var/www/html/"
+      remote_src: yes
+
+  - name: copy file
+    shell: "rsync -r /var/www/html/EstateAgency/*   /var/www/html"
+
+  - name: change uid and gid
+    file:
+      path: $HOME /var/www/html/"
+      owner: apache
+      group:  apache 
+      mode: 0644
+      state: absent
+

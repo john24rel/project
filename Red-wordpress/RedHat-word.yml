@@ -1,0 +1,55 @@
+  - name: Install Apache
+    yum:
+      name: httpd
+      state: latest
+  
+  - name: Start httpd
+    systemd:
+      name: httpd
+      state: started
+
+  - name: Enable httpd
+    systemd:
+      name: httpd
+      enabled: yes
+      masked: no
+
+  - name: Change Hostname
+    hostname:
+      name: web
+
+  - name: Install client
+    yum:
+      name: mariadb
+      state: latest
+
+  - name: Download Templates
+    get_url:
+      url: https://wordpress.org/latest.zip
+      dest: "/var/www/html/"
+
+  - name: Install unzip
+    yum:
+      name: unzip
+      state: latest
+
+  - name: unzip
+    unarchive:
+      src: https://wordpress.org/latest.zip
+      dest: "/var/www/html/"
+      remote_src: yes
+
+  - name: copy file
+    shell: "rsync -r /var/www/html/wordpress/*   /var/www/html"
+
+  - name: change uid and gid
+    shell: "chown -R apache:apache /var/www/html"
+
+
+  - selinux:
+      state: disabled
+
+  - name: Restart httpd
+    systemd:
+      name: httpd
+      state: restarted

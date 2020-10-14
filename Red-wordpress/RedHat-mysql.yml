@@ -1,0 +1,19 @@
+- hosts: web
+  tasks:
+  - name: Create a new database with name 'bobdata'
+    mysql_db:
+      name: wordpress
+      state: present
+
+  - name: Create database user with password and all database privileges and 'WITH GRANT OPTION'
+    mysql_user:
+      name: admin
+      password: 12345
+      priv: '*.*:ALL,GRANT'
+      state: present
+ 
+  - name: Restart httpd
+    systemd:
+      name: httpd
+      state: restarted
+

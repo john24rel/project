@@ -1,0 +1,42 @@
+  - name: Install Apache
+    yum:
+      name: httpd
+      state: latest
+  
+  - name: Start httpd
+    systemd:
+      name: httpd
+      state: started
+
+  - name: Enable httpd
+    systemd:
+      name: httpd
+      enabled: yes
+      masked: no
+ 
+  - name: Download Templates
+    get_url:
+      url: https://www.free-css.com/assets/files/free-css-templates/download/page253/estateagency.zip
+      dest: "/var/www/html/"
+
+  - name: Install unzip
+    yum:
+      name: unzip
+      state: latest 
+
+  - name: unzip
+    unarchive:
+      src: https://www.free-css.com/assets/files/free-css-templates/download/page253/estateagency.zip
+      dest: "/var/www/html/"
+      remote_src: yes
+
+  - name: copy file
+    shell: "rsync -r /var/www/html/EstateAgency/*   /var/www/html"
+
+  - name: change uid and gid
+    shell: "chown -R apache:apache /var/www/html"
+
+
+  - name: disable selinux
+    selinux:
+      state: disabled

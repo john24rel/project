@@ -1,0 +1,20 @@
+- hosts: web
+  tasks:
+  handlers:
+  - name: Redhat restart httpd
+    service:
+      name: "{{ service-name }}"
+      state: restarted
+
+  - name: Debian restart apache
+    service:
+      name: "{{ service-name}}"
+      state: restarted
+  tasks:
+  - include_tasks: "{{ item}}"
+    with_items:     
+      - "{{ ansible_os_family }}-word.yml"
+      - "{{ ansible_os_family }}-php.yml"
+      - "{{ ansible_os_family }}-mysql.yml"
+    
+

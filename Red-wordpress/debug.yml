@@ -1,0 +1,25 @@
+- hosts: web
+  tasks:
+  - name: Debug
+    debug:
+      msg: "{{ ansible_os_family }}"
+
+
+- hosts: web
+  tasks:
+  - name: Debug
+    debug:
+      msg: "{{ service_name }}"
+
+- hosts: db
+  tasks:
+  - name: Debug
+    debug:
+      msg: "{{ service_name }}"
+
+
+- hosts: db
+  tasks:
+  - name: Debug
+    debug:
+      msg: "{{ ansible_os_family }}"

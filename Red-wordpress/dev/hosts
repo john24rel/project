@@ -1,0 +1,8 @@
+52.91.13.216  ansible_user=ubuntu
+
+[web]
+
+52.90.35.71  ansible_user=centos
+
+
+

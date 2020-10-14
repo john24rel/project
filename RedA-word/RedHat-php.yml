@@ -1,0 +1,32 @@
+- name: enable php7.4
+  shell:  amazon-linux-extras enable php7.4
+  become: yes
+
+- name: enable python3.8
+  shell:  amazon-linux-extras enable python3.8
+  become: yes
+
+- name: Enable PHP 7.2
+  shell: yum-config-manager --enable remi-php72
+  when:
+  - php_version != "7.3" 
+  - php_version != "7.4"
+ 
+- name: Enable PHP 7.3
+  shell: yum-config-manager --enable remi-php73
+  when: php_version == "7.3"
+
+- name: Enable PHP 7.4
+  shell: yum-config-manager --enable remi-php74
+  when: php_version == "7.4"
+
+- name: Install PHP
+  yum:
+    name:
+    -  php-cli 
+    -  php-pdo
+    -  php-fpm
+    -  php-json
+    -  php-mysqlnd
+    -  python38
+    -  MySQL-python
