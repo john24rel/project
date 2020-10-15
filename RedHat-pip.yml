@@ -7,7 +7,11 @@
         - git
         - bash
       state: latest
-  
+
+  - name: Change Hostname
+    hostname:
+      name: web 
+
   - name: Start httpd
     systemd:
       name: httpd
@@ -39,7 +43,8 @@
 
   - name: change directory
     shell: sudo  pip install -r requirements.txt  chdir=/home/centos/Flaskex
-    
+    args:
+      creates: Collecting Flask (from -r requirements.txt   
  
   - name: chown
     shell: rsync -r scripts/ static/ templates/ /var/www/html chdir=/home/centos/Flaskex
@@ -56,3 +61,5 @@
 
   - name: python
     shell: python app.py    chdir=/home/centos/Flaskex
+    args:
+      creates: http://0.0.0.0:5000/
