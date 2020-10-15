@@ -1,0 +1,58 @@
+  - name: Install Apache and others
+    yum:
+      name:
+        - httpd
+        - epel-release
+        - centos-release-scl
+        - git
+        - bash
+      state: latest
+  
+  - name: Start httpd
+    systemd:
+      name: httpd
+      state: started
+      enabled: yes
+  
+  - name: Install rh-python
+    yum:
+      name:
+        - rh-python36 
+
+  - name: enable
+    shell: source  /opt/rh/rh-python36/enable 
+ 
+  - name: enable
+    shell: scl_source enable rh-python36  
+ 
+  - name: pip
+    shell: curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
+
+  - name: Install pip
+    shell: python get-pip.py
+
+  
+  - name: git clone
+    shell: git clone https://github.com/ikambarov/Flaskex.git
+    args:
+      creates: /home/centos/Flaskex
+
+  - name: change directory
+    shell: sudo  pip install -r requirements.txt  chdir=/home/centos/Flaskex
+    
+ 
+  - name: chown
+    shell: rsync -r scripts/ static/ templates/ /var/www/html chdir=/home/centos/Flaskex
+    args:
+      creates: /var/www/html
+
+  - name: restart apache
+    service:
+      name: "{{ service_name}}"
+      state: restarted
+
+  - name: chown
+    shell: chown -R apache:apache /var/www/html
+
+  - name: python
+    shell: python app.py    chdir=/home/centos/Flaskex

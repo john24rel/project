@@ -1,0 +1,20 @@
+- hosts: all
+  tasks:
+  - name: Install Prerequisites
+    yum:
+      name:
+      - vim
+      - epel-release
+      - kernel
+    register: yum
+    become: yes
+
+  - name: Reboot
+    reboot:
+      reboot_timeout: 400
+    when: yum.changed or selinux.changed
+
+  tasks:
+  - include_tasks: "{{ ansible_os_family }}-pip.yml"
+    
+     
